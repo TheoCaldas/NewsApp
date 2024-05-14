@@ -18,4 +18,9 @@ protocol NewsRepository {
     ///   - q: Result article must include this keyword.
     /// - Returns: An array of Article model objects, if succeed. Throws otherwise. 
     func getArticles(from startDate: Date, to endDate: Date, language: Language?, keyword q: String?) async throws -> [Article]
+    
+    /// Gets an array of Article objects.
+    /// - Parameter country: Result articles must be from this.
+    /// - Returns: An array of Article model objects, if succeed. Throws otherwise.
+    func getHeadlines(country: Country) async throws -> [Article]
 }

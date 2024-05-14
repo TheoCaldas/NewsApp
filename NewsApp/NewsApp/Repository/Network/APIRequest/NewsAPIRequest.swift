@@ -10,6 +10,7 @@ import Foundation
 // MARK: - NewsAPI Request Implementation
 enum NewsAPIRequest: APIRequest {
     case getArticles(startDate: Date, endDate: Date, language: Language?, q: String?)
+    case getHeadlines(country: Country)
 
     var scheme: String {return "https"}
     
@@ -17,26 +18,27 @@ enum NewsAPIRequest: APIRequest {
     
     var path: String {
         switch self {
-            case .getArticles:
-                return "/v2/everything"
+        case .getArticles:
+            return "/v2/everything"
+        case .getHeadlines:
+            return "/v2/top-headlines"
         }
     }
     
     var method: String {
         switch self {
-            case .getArticles:
-                return "GET"
+        default:
+            return "GET"
         }
     }
     
     var parameters: [URLQueryItem] {
+        // Gets NewsAPI key from enviroment variable
+        let env = ProcessInfo.processInfo.environment
+        let newsAPIKey = env["NEWS_API_KEY"] ?? ""
+        
         switch self {
         case .getArticles(let startDate, let endDate, let language, let q):
-            
-            // Gets NewsAPI key from enviroment variable
-            let env = ProcessInfo.processInfo.environment
-            let newsAPIKey = env["NEWS_API_KEY"] ?? ""
-            
             var queryItems: [URLQueryItem] = [
                 URLQueryItem(name: "sortBy", value: "popularity"),
                 URLQueryItem(name: "from", value: startDate.toISO()),
@@ -53,7 +55,14 @@ enum NewsAPIRequest: APIRequest {
             }
             
             return queryItems
+            
+        case .getHeadlines(country: let country):
+            return [
+                URLQueryItem(name: "country", value: country.rawValue),
+                URLQueryItem(name: "apiKey", value: newsAPIKey),
+            ]
         }
+
     }
     
     var headers: [String: String] {return [:]}

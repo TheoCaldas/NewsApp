@@ -10,9 +10,20 @@ import Foundation
 // MARK: - NewsAPI Repository Implementation
 class NewsAPIRepository: NewsRepository {
     func getArticles(from startDate: Date, to endDate: Date, language: Language?, keyword q: String?) async throws -> [Article] {
-        
         // Creates News API Request with arguments
         let newsAPI = NewsAPIRequest.getArticles(startDate: startDate, endDate: endDate, language: language, q: q)
+        
+        // Makes Request and converts to News API Response object
+        let responseObject = try await NetworkService().request(NewsAPIResponse.self, apiRequest: newsAPI)
+        
+        // Converts to Article model array
+        return self.toArticleArray(responseObject)
+    }
+    
+    func getHeadlines(country: Country) async throws -> [Article] {
+        // Creates News API Request with arguments
+        let newsAPI = NewsAPIRequest.getHeadlines(country: country)
+        
         // Makes Request and converts to News API Response object
         let responseObject = try await NetworkService().request(NewsAPIResponse.self, apiRequest: newsAPI)
         

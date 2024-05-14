@@ -13,7 +13,7 @@ final class NewsAPIRepositoryTests: XCTestCase {
     let newsRepo = NewsAPIRepository()
     
     // MARK: - Valid Tests
-    func testValid() async throws {
+    func testValidArticles() async throws {
         let articles = try await self.newsRepo.getArticles(
             from: Date.yesterday,
             to: Date.now,
@@ -30,6 +30,11 @@ final class NewsAPIRepositoryTests: XCTestCase {
             language: nil,
             keyword: "neymar"
         )
+        XCTAssertNotNil(articles)
+    }
+    
+    func testValidHeadlines() async throws {
+        let articles = try await self.newsRepo.getHeadlines(country: .us)
         XCTAssertNotNil(articles)
     }
     

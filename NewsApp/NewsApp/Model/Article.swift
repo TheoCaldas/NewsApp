@@ -9,7 +9,7 @@ import Foundation
 
 struct Article{
     var title: String
-    var description: String
+    var description: String?
     var author: String
     var publishDate: Date
     var content: String

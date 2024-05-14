@@ -23,6 +23,7 @@
 		E4D5E2202BF3025000EBA3D9 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5E21F2BF3025000EBA3D9 /* Date.swift */; };
 		E4D5E2252BF30AA200EBA3D9 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5E2242BF30AA200EBA3D9 /* NetworkError.swift */; };
 		E4D5E2272BF3100200EBA3D9 /* NewsAPIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5E2262BF3100200EBA3D9 /* NewsAPIResponse.swift */; };
+		E4D5E2582BF4220E00EBA3D9 /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5E2572BF4220E00EBA3D9 /* Country.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		E4D5E21F2BF3025000EBA3D9 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		E4D5E2242BF30AA200EBA3D9 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		E4D5E2262BF3100200EBA3D9 /* NewsAPIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsAPIResponse.swift; sourceTree = "<group>"; };
+		E4D5E2572BF4220E00EBA3D9 /* Country.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +131,7 @@
 			children = (
 				E4D5E20D2BF2ECF100EBA3D9 /* Article.swift */,
 				E4D5E20F2BF2F15100EBA3D9 /* Language.swift */,
+				E4D5E2572BF4220E00EBA3D9 /* Country.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -312,7 +315,7 @@
 		E4D5E2012BF23D6600EBA3D9 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputFileListPaths = (
@@ -334,6 +337,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4D5E2582BF4220E00EBA3D9 /* Country.swift in Sources */,
 				E4D5E20E2BF2ECF100EBA3D9 /* Article.swift in Sources */,
 				E4D5E2122BF2F39800EBA3D9 /* NewsAPIRepository.swift in Sources */,
 				E4D5E21E2BF2F9E300EBA3D9 /* NewsAPIRequest.swift in Sources */,
