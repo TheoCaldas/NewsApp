@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 // MARK: - NewsCollection Fecth Worker Protocol
 protocol NewsCollectionFecthWorker {
@@ -16,6 +17,8 @@ protocol NewsCollectionFecthWorker {
     func getArticles(by keyword: String, from startDate: Date, to endDate: Date) async throws -> [Article]
     
     func getHeadlines(by country: Country) async throws -> [Article]
+    
+    func getImage(url: String) async -> UIImage?
 }
 
 enum FetchError: Error {
@@ -33,7 +36,6 @@ final class NewsCollectionFecth {
 
 // MARK: - NewsCollection Fecth Worker Implementation
 extension NewsCollectionFecth: NewsCollectionFecthWorker {
-    
     func getArticles(by keyword: String, from startDate: Date, to endDate: Date, language: Language) async throws -> [Article] {
         return try await self.fetch(by: keyword, from: startDate, to: endDate, language: language)
     }
@@ -57,6 +59,14 @@ extension NewsCollectionFecth: NewsCollectionFecthWorker {
             throw FetchError.isEmpty
         }
         return articles
+    }
+    
+    func getImage(url: String) async -> UIImage? {
+        do{
+            return try await NetworkService().requestImage(from: url)
+        } catch {
+            return nil
+        }
     }
 }
 

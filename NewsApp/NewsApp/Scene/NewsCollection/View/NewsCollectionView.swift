@@ -115,17 +115,22 @@ extension NewsCollectionView: UICollectionViewDataSource{
         
         if smalCells.contains(index), let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsCollectionSmallCellView.id, for: indexPath) as? NewsCollectionSmallCellView{
             
-            if let article = vc?.articles[indexPath.row]{
+            if let article = vc?.articles[index]{
                 cell.title.text = article.title
                 cell.author.text = "por \(article.author)"
             }
             return cell
         } else if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsCollectionBigCellView.id, for: indexPath) as? NewsCollectionBigCellView{
 
-            if let article = vc?.articles[indexPath.row]{
+            if let article = vc?.articles[index]{
                 cell.title.text = article.title
                 cell.author.text = "por \(article.author)"
                 cell.descript.text = article.description
+                vc?.interactor?.getImage(url: article.imageURL ?? "", completion: { articleImage in
+                    DispatchQueue.main.async {
+                        cell.image.image = articleImage.image
+                    }
+                })
             }
             return cell
         }
@@ -178,7 +183,8 @@ extension NewsCollectionView: UICollectionViewDelegateFlowLayout{
         if let cell = collectionView.cellForItem(at: indexPath) as? NewsCollectionSmallCellView{
             cell.updateColor(true)
         } else if let cell = collectionView.cellForItem(at: indexPath) as? NewsCollectionBigCellView{
-            cell.updateColor(true)
+//            cell.updateColor(true)
+            cell.animateImage(hide: false)
         }
     }
     
@@ -186,7 +192,8 @@ extension NewsCollectionView: UICollectionViewDelegateFlowLayout{
         if let cell = collectionView.cellForItem(at: indexPath) as? NewsCollectionSmallCellView{
             cell.updateColor(false)
         }else if let cell = collectionView.cellForItem(at: indexPath) as? NewsCollectionBigCellView{
-            cell.updateColor(false)
+//            cell.updateColor(false)
+            cell.animateImage(hide: true)
         }
     }
 }

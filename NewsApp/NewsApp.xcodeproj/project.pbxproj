@@ -39,6 +39,7 @@
 		E4D5E2782BF476C600EBA3D9 /* GradientAlphaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5E2772BF476C600EBA3D9 /* GradientAlphaView.swift */; };
 		E4D5E27A2BF4D3FC00EBA3D9 /* NewsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5E2792BF4D3FC00EBA3D9 /* NewsCollectionView.swift */; };
 		E4D5E27C2BF5359A00EBA3D9 /* NewsCollectionBigCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5E27B2BF5359A00EBA3D9 /* NewsCollectionBigCellView.swift */; };
+		E4D5E27E2BF544AB00EBA3D9 /* ArticleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5E27D2BF544AB00EBA3D9 /* ArticleImage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +88,7 @@
 		E4D5E2772BF476C600EBA3D9 /* GradientAlphaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientAlphaView.swift; sourceTree = "<group>"; };
 		E4D5E2792BF4D3FC00EBA3D9 /* NewsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCollectionView.swift; sourceTree = "<group>"; };
 		E4D5E27B2BF5359A00EBA3D9 /* NewsCollectionBigCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCollectionBigCellView.swift; sourceTree = "<group>"; };
+		E4D5E27D2BF544AB00EBA3D9 /* ArticleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleImage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +162,7 @@
 			isa = PBXGroup;
 			children = (
 				E4D5E20D2BF2ECF100EBA3D9 /* Article.swift */,
+				E4D5E27D2BF544AB00EBA3D9 /* ArticleImage.swift */,
 				E4D5E20F2BF2F15100EBA3D9 /* Language.swift */,
 				E4D5E2572BF4220E00EBA3D9 /* Country.swift */,
 			);
@@ -436,6 +439,7 @@
 				E4D5E2762BF466FB00EBA3D9 /* NewsCollectionFactory.swift in Sources */,
 				E4D5E26D2BF4530300EBA3D9 /* NewsCollectionInteractor.swift in Sources */,
 				E4D5E2652BF449BB00EBA3D9 /* NewsCollectionSmallCellView.swift in Sources */,
+				E4D5E27E2BF544AB00EBA3D9 /* ArticleImage.swift in Sources */,
 				E4D5E2632BF4495100EBA3D9 /* NewsCollectionHeaderView.swift in Sources */,
 				E4D5E2782BF476C600EBA3D9 /* GradientAlphaView.swift in Sources */,
 				E4D5E2272BF3100200EBA3D9 /* NewsAPIResponse.swift in Sources */,

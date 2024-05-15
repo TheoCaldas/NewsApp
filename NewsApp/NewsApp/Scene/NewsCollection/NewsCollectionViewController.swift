@@ -15,6 +15,7 @@ protocol NewsCollectionViewControllerInput: AnyObject {
 protocol NewsCollectionViewControllerOutput: AnyObject {
     func searchArticles(by keyword: String)
     func searchArticles(by country: Country)
+    func getImage(url: String, completion: @escaping (ArticleImage) -> Void)
 }
 
 class NewsCollectionViewController: UIViewController {
