@@ -24,8 +24,7 @@ extension NewsCollectionInteractor: NewsCollectionInteractorInput {
     func getImage(url: String, completion: @escaping (ArticleImage) -> Void) {
         Task{
             if let image = await fetchWorker?.getImage(url: url){
-                let articleImage = ArticleImage(image: image)
-                completion(articleImage)
+                completion(image)
             }
         }
     }

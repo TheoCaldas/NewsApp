@@ -36,17 +36,13 @@ class NewsCollectionBigCellView: UICollectionViewCell, BaseView{
 
     }
     
-    func updateColor(_ isHighlited: Bool){
-        backgroundColor = (isHighlited) ? .tertiary : .cellBackground
-    }
-    
-     func animateImage(hide: Bool){
+    func animateImage(hide: Bool, duration: TimeInterval? = nil){
         let initialAlpha: CGFloat = (hide) ? maxImageAlpha : minImageAlpha
         let finalAlpha: CGFloat = (hide) ? minImageAlpha : maxImageAlpha
         
         image.alpha = initialAlpha
         UIView.animate(
-            withDuration: 0.2,
+            withDuration: duration ?? 0.2,
             delay: 0,
             options: [.curveEaseOut],
             animations: {

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import UIKit
 
 // MARK: - NewsCollection Fecth Worker Protocol
 protocol NewsCollectionFecthWorker {
@@ -18,7 +17,7 @@ protocol NewsCollectionFecthWorker {
     
     func getHeadlines(by country: Country) async throws -> [Article]
     
-    func getImage(url: String) async -> UIImage?
+    func getImage(url: String) async -> ArticleImage?
 }
 
 enum FetchError: Error {
@@ -61,9 +60,10 @@ extension NewsCollectionFecth: NewsCollectionFecthWorker {
         return articles
     }
     
-    func getImage(url: String) async -> UIImage? {
+    func getImage(url: String) async -> ArticleImage? {
         do{
-            return try await NetworkService().requestImage(from: url)
+            let image = try await NetworkService().requestImage(from: url)
+            return ArticleImage(image: image)
         } catch {
             return nil
         }

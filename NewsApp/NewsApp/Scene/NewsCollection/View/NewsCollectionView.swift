@@ -183,7 +183,6 @@ extension NewsCollectionView: UICollectionViewDelegateFlowLayout{
         if let cell = collectionView.cellForItem(at: indexPath) as? NewsCollectionSmallCellView{
             cell.updateColor(true)
         } else if let cell = collectionView.cellForItem(at: indexPath) as? NewsCollectionBigCellView{
-//            cell.updateColor(true)
             cell.animateImage(hide: false)
         }
     }
@@ -192,7 +191,6 @@ extension NewsCollectionView: UICollectionViewDelegateFlowLayout{
         if let cell = collectionView.cellForItem(at: indexPath) as? NewsCollectionSmallCellView{
             cell.updateColor(false)
         }else if let cell = collectionView.cellForItem(at: indexPath) as? NewsCollectionBigCellView{
-//            cell.updateColor(false)
             cell.animateImage(hide: true)
         }
     }
@@ -334,7 +332,11 @@ extension NewsCollectionView{
     }
     
     private func animateCell(cell: UICollectionViewCell, index: Int){
+        
         if (!displayedCells.contains(index)){
+            if let cell = cell as? NewsCollectionBigCellView{
+                cell.animateImage(hide: true, duration: 1.0)
+            }
             displayedCells.append(index)
             cell.alpha = 0.2
             cell.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
