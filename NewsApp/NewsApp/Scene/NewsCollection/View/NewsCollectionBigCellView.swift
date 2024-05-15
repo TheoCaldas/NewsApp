@@ -49,6 +49,10 @@ class NewsCollectionBigCellView: UICollectionViewCell, BaseView{
                 self.image.alpha = finalAlpha
         })
     }
+    
+    func updateColor(_ isHighlited: Bool){
+        backgroundColor = (isHighlited) ? .tertiary : .cellBackground
+    }
 }
 
 extension NewsCollectionBigCellView{

@@ -56,6 +56,14 @@ class NewsCollectionViewController: UIViewController {
         newsCollection?.updateResultsLabel()
         interactor?.searchArticles(by: .us)
     }
+    
+    func goToDetails(index: Int, image: UIImage?){
+        if let image = image{
+            router?.pushArticleDetail(article: articles[index], image: ArticleImage(image: image))
+        } else{
+            router?.pushArticleDetail(article: articles[index], image: nil)
+        }
+    }
 }
 
 extension NewsCollectionViewController: NewsCollectionViewControllerInput{
