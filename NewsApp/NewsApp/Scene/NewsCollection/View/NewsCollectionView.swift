@@ -16,12 +16,18 @@ class NewsCollectionView: UIView, BaseView {
     
     weak var vc: NewsCollectionViewController?
     
-    private let spaceOffset: CGFloat = 15
-    private let alphaHeight: CGFloat = 170
+    private let cellOffset: CGFloat = 15
+    private let alphaLayersHeight: CGFloat = 170
     
     init(_ vc: NewsCollectionViewController) {
         self.vc = vc
         super.init(frame: .zero)
+        
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(NewsCollectionSmallCellView.self, forCellWithReuseIdentifier: NewsCollectionSmallCellView.id)
+        collectionView.register(NewsCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: NewsCollectionHeaderView.id)
+        
         setupView()
     }
     
@@ -57,10 +63,10 @@ extension NewsCollectionView{
         // COLLECTION VIEW
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: topAnchor, constant: spaceOffset * 2),
-            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: spaceOffset),
-            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -spaceOffset),
-            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -spaceOffset)
+            collectionView.topAnchor.constraint(equalTo: topAnchor, constant: cellOffset * 2),
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: cellOffset),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -cellOffset),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -cellOffset)
         ])
         
         // ALPHA
@@ -69,7 +75,7 @@ extension NewsCollectionView{
             bottomAlphaView.bottomAnchor.constraint(equalTo: bottomAnchor),
             bottomAlphaView.leadingAnchor.constraint(equalTo: leadingAnchor),
             bottomAlphaView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            bottomAlphaView.heightAnchor.constraint(equalToConstant: alphaHeight)
+            bottomAlphaView.heightAnchor.constraint(equalToConstant: alphaLayersHeight)
        ])
         
         topAlphaView.translatesAutoresizingMaskIntoConstraints = false
@@ -77,7 +83,7 @@ extension NewsCollectionView{
             topAlphaView.topAnchor.constraint(equalTo: topAnchor),
             topAlphaView.leadingAnchor.constraint(equalTo: leadingAnchor),
             topAlphaView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            topAlphaView.heightAnchor.constraint(equalToConstant: alphaHeight)
+            topAlphaView.heightAnchor.constraint(equalToConstant: alphaLayersHeight)
        ])
     }
 }
@@ -87,14 +93,14 @@ extension NewsCollectionView: UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsCollectionSmallCellView.id, for: indexPath) as? NewsCollectionSmallCellView{
-            cell.title.text = vc?.articlesMock[indexPath.row]
+            cell.title.text = vc?.articles[indexPath.row].title
             return cell
         }
         return UICollectionViewCell()
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return vc?.articlesMock.count ?? 0
+        return vc?.articles.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -121,17 +127,17 @@ extension NewsCollectionView: UICollectionViewDataSource{
 extension NewsCollectionView: UICollectionViewDelegateFlowLayout{
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
-        let w = frame.width / 2 - (1.5 * spaceOffset)
+        let w = frame.width / 2 - (1.5 * cellOffset)
         return CGSize(width: w, height: w)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         // Affects vertically
-        return spaceOffset
+        return cellOffset
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        print(articlesMock[indexPath.row])
+//        print(articles[indexPath.row])
     }
     
     func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
@@ -152,5 +158,22 @@ extension NewsCollectionView: UISearchBarDelegate{
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         vc?.captureTextInput(searchBar.text)
+        getHeaderView()?.collectionLabel.text = "busca \"\(searchBar.text ?? "")\"..."
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.isEmpty{
+            getHeaderView()?.resetLabel()
+        }
+    }
+}
+
+// MARK: - Private Methods
+extension NewsCollectionView{
+    private func getHeaderView() -> NewsCollectionHeaderView? {
+        if let headerView = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(item: 0, section: 0)) as? NewsCollectionHeaderView {
+            return headerView
+        }
+        return nil
     }
 }

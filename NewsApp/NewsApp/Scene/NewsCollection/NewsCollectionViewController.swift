@@ -14,6 +14,7 @@ protocol NewsCollectionViewControllerInput: AnyObject {
 
 protocol NewsCollectionViewControllerOutput: AnyObject {
     func searchArticles(by keyword: String)
+    func searchArticles(by country: Country)
 }
 
 class NewsCollectionViewController: UIViewController {
@@ -23,7 +24,7 @@ class NewsCollectionViewController: UIViewController {
     
     var newsCollection: NewsCollectionView?
     
-    var articlesMock = ["1", "2", "3", "4", "5", "6", "7", "8", "9"] {
+    var articles = [Article]() {
         didSet {
             DispatchQueue.main.async {
                 self.newsCollection?.collectionView.reloadData()
@@ -34,19 +35,15 @@ class NewsCollectionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        newsCollection = NewsCollectionView(self)
-        guard let newsCollection = newsCollection else { return }
-        
-        newsCollection.collectionView.dataSource = newsCollection
-        newsCollection.collectionView.delegate = newsCollection
-        newsCollection.collectionView.register(NewsCollectionSmallCellView.self, forCellWithReuseIdentifier: NewsCollectionSmallCellView.id)
-        newsCollection.collectionView.register(NewsCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: NewsCollectionHeaderView.id)
-        
+        let newsCollection = NewsCollectionView(self)
         view = newsCollection
+        self.newsCollection = newsCollection
+        
+        interactor?.searchArticles(by: .us)
     }
     
     func captureTextInput(_ text: String?){
-        self.articlesMock.removeAll()
+        self.articles.removeAll()
         if let text = text{
             interactor?.searchArticles(by: text)
         }
@@ -56,7 +53,7 @@ class NewsCollectionViewController: UIViewController {
 // MARK: - NewsCollection View Controller Input Implementation
 extension NewsCollectionViewController: NewsCollectionViewControllerInput{
     func showArticles(_ articles: [Article]) {
-        self.articlesMock = articles.map { $0.title }
+        self.articles = articles
     }
     
     func showFailure(with message: String) {

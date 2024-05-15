@@ -15,6 +15,7 @@ class NewsCollectionHeaderView: UICollectionReusableView, BaseView{
     let searchBar = UISearchBar()
     
     private let spaceOffset: CGFloat = 30
+    private let defaultLabelText = "Recentes"
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -29,6 +30,10 @@ class NewsCollectionHeaderView: UICollectionReusableView, BaseView{
         addSubview(collectionLabel)
         addSubview(searchBar)
     }
+    
+    func resetLabel(){
+        collectionLabel.text = defaultLabelText
+    }
 }
 
 extension NewsCollectionHeaderView{
@@ -37,7 +42,7 @@ extension NewsCollectionHeaderView{
         collectionLabel.font = UIFont(name: "Jost-Regular", size: 40)
         collectionLabel.textColor = .primary
         collectionLabel.numberOfLines = 1
-        collectionLabel.text = "Recentes"
+        collectionLabel.text = defaultLabelText
         collectionLabel.textAlignment = .center
         
         // SEARCH BAR

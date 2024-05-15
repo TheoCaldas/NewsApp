@@ -14,6 +14,8 @@ protocol NewsCollectionFecthWorker {
     func getArticles(by keyword: String, language: Language) async throws -> [Article]
     
     func getArticles(by keyword: String, from startDate: Date, to endDate: Date) async throws -> [Article]
+    
+    func getHeadlines(by country: Country) async throws -> [Article]
 }
 
 enum FetchError: Error {
@@ -42,6 +44,19 @@ extension NewsCollectionFecth: NewsCollectionFecthWorker {
     
     func getArticles(by keyword: String, from startDate: Date, to endDate: Date) async throws -> [Article] {
         return try await self.fetch(by: keyword, from: startDate, to: endDate, language: nil)
+    }
+    
+    func getHeadlines(by country: Country) async throws -> [Article] {
+        var articles = [Article]()
+        do {
+            articles = try await self.repo.getHeadlines(country: country)
+        } catch {
+            throw FetchError.didFail
+        }
+        if articles.isEmpty{
+            throw FetchError.isEmpty
+        }
+        return articles
     }
 }
 

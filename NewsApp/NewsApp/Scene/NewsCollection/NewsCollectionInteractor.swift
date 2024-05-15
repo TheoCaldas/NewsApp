@@ -38,4 +38,23 @@ extension NewsCollectionInteractor: NewsCollectionInteractorInput {
             }
         }
     }
+    
+    func searchArticles(by country: Country) {
+        Task{
+            do{
+                if let articles = try await fetchWorker?.getHeadlines(by: country){
+                    presenter?.showArticles(articles)
+                }
+            } catch (let error){
+                switch error as? FetchError{
+                case .isEmpty:
+                    presenter?.showFailure(with: "No articles found for \"\(country)\"")
+                case .didFail:
+                    presenter?.showFailure(with: "Connection error")
+                default:
+                    presenter?.showFailure(with: "Unknown error")
+                }
+            }
+        }
+    }
 }
