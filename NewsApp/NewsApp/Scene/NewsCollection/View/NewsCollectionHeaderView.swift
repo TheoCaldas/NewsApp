@@ -14,6 +14,8 @@ class NewsCollectionHeaderView: UICollectionReusableView, BaseView{
     let collectionLabel = UILabel()
     let searchBar = UISearchBar()
     
+    private let spaceOffset: CGFloat = 30
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -48,21 +50,24 @@ extension NewsCollectionHeaderView{
 
 extension NewsCollectionHeaderView{
     func setupConstraints() {
-        // LABEL
-        collectionLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            collectionLabel.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 30),
-            collectionLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
-            collectionLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collectionLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -30),
-        ])
         
         // SEARCH BAR
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            searchBar.topAnchor.constraint(equalTo: topAnchor, constant: 30),
-            searchBar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30),
-            searchBar.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30),
+            searchBar.topAnchor.constraint(equalTo: topAnchor, constant: spaceOffset * 2),
+            searchBar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: spaceOffset),
+            searchBar.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -spaceOffset),
+//            searchBar.heightAnchor.constraint(equalToConstant: 150)
+        ])
+        
+        // LABEL
+        collectionLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            collectionLabel.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: spaceOffset / 2),
+            collectionLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+            collectionLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -spaceOffset / 2),
+//            collectionLabel.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
 }

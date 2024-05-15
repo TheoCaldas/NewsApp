@@ -1,5 +1,5 @@
 //
-//  NewsCollectionSmallCell.swift
+//  NewsCollectionSmallCellView.swift
 //  NewsApp
 //
 //  Created by Theo Necyk Agner Caldas on 14/05/24.
@@ -7,7 +7,8 @@
 
 import UIKit
 
-class NewsCollectionSmallCell: UICollectionViewCell, BaseView{
+class NewsCollectionSmallCellView: UICollectionViewCell, BaseView{
+    
     static let id = "smallCell"
     
     let title = UILabel()
@@ -30,7 +31,7 @@ class NewsCollectionSmallCell: UICollectionViewCell, BaseView{
     }
 }
 
-extension NewsCollectionSmallCell{
+extension NewsCollectionSmallCellView{
     func setupStyles() {
         backgroundColor = .cellBackground
         
@@ -46,7 +47,7 @@ extension NewsCollectionSmallCell{
     }
 }
 
-extension NewsCollectionSmallCell{
+extension NewsCollectionSmallCellView{
     func setupConstraints() {
         title.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
