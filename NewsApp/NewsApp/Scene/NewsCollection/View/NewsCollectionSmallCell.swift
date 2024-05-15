@@ -40,7 +40,7 @@ extension NewsCollectionSmallCell{
         // TITLE
         title.font = UIFont(name: "Jost-Regular", size: 20)
         title.textColor = .primary
-        title.numberOfLines = 1
+        title.numberOfLines = 5
         title.textAlignment = .center
         
     }

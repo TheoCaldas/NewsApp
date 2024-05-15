@@ -7,11 +7,29 @@
 
 import UIKit
 
-class NewsCollectionViewController: UIViewController, BaseView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+protocol NewsCollectionViewControllerInput: AnyObject {
+    func showArticles(_ articles: [Article])
+    func showFailure(with message: String)
+}
+
+protocol NewsCollectionViewControllerOutput: AnyObject {
+    func searchArticles(by keyword: String)
+}
+
+class NewsCollectionViewController: UIViewController, BaseView {
+    
+    var interactor: NewsCollectionInteractorInput?
+    var router: NewsCollectionRouter?
     
     var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
-    let articlesMock = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    var articlesMock = ["1", "2", "3", "4", "5", "6", "7", "8", "9"] {
+        didSet {
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
+        }
+    }
     
     private let spaceOffset: CGFloat = 15
     
@@ -56,11 +74,11 @@ extension NewsCollectionViewController{
 }
 
 // MARK: - Collection View Data Source Implementation
-extension NewsCollectionViewController{
+extension NewsCollectionViewController: UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsCollectionSmallCell.id, for: indexPath) as? NewsCollectionSmallCell{
-            cell.title.text = "\(articlesMock[indexPath.row])"
+            cell.title.text = articlesMock[indexPath.row]
             return cell
         }
         return UICollectionViewCell()
@@ -72,7 +90,11 @@ extension NewsCollectionViewController{
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader {
-            return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NewsCollectionHeaderView.id, for: indexPath)
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NewsCollectionHeaderView.id, for: indexPath)
+            if let headerView = header as? NewsCollectionHeaderView{
+                headerView.searchBar.delegate = self
+            }
+            return header
         }
         return UICollectionReusableView()
     }
@@ -87,7 +109,7 @@ extension NewsCollectionViewController{
 }
 
 // MARK: - Collection View Delegate Flow Layout Implementation
-extension NewsCollectionViewController{
+extension NewsCollectionViewController: UICollectionViewDelegateFlowLayout{
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
         let w = view.frame.width / 2 - (1.5 * spaceOffset)
@@ -112,6 +134,32 @@ extension NewsCollectionViewController{
     func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? NewsCollectionSmallCell{
             cell.updateColor(false)
+        }
+    }
+}
+
+// MARK: - Search Bar Delegate Implementation
+extension NewsCollectionViewController: UISearchBarDelegate{
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        self.articlesMock.removeAll()
+        if let text = searchBar.text{
+            interactor?.searchArticles(by: text)
+        }
+    }
+}
+
+// MARK: - NewsCollection View Controller Input Implementation
+extension NewsCollectionViewController: NewsCollectionViewControllerInput{
+    func showArticles(_ articles: [Article]) {
+        self.articlesMock = articles.map { $0.title }
+    }
+    
+    func showFailure(with message: String) {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: "Sem resultados", message: message, preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            self.present(alert, animated: true)
         }
     }
 }

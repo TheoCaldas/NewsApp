@@ -18,7 +18,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         self.window = UIWindow(windowScene: windowScene)
         
-        let navigationController = UINavigationController(rootViewController: NewsCollectionViewController())
+        let factory = DefaultNewsCollectionFactory()
+        let configured = factory.configured(NewsCollectionViewController())
+        let navigationController = UINavigationController(rootViewController: configured)
         
         self.window?.rootViewController = navigationController
         self.window?.makeKeyAndVisible()

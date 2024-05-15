@@ -22,6 +22,7 @@ extension Date {
         return Date.isoFormatter.string(from: self)
     }
     
+    static var dayBeforeYesterday: Date { return Date().dayBefore.dayBefore }
     static var yesterday: Date { return Date().dayBefore }
     static var tomorrow: Date { return Date().dayAfter }
     
