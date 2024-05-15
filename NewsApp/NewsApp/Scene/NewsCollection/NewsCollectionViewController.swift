@@ -39,14 +39,21 @@ class NewsCollectionViewController: UIViewController {
         view = newsCollection
         self.newsCollection = newsCollection
         
-        interactor?.searchArticles(by: .us)
+        defaultSearch()
     }
     
     func captureTextInput(_ text: String?){
         self.articles.removeAll()
+        newsCollection?.updateResultsLabel()
         if let text = text{
             interactor?.searchArticles(by: text)
         }
+    }
+    
+    func defaultSearch(){
+        self.articles.removeAll()
+        newsCollection?.updateResultsLabel()
+        interactor?.searchArticles(by: .us)
     }
 }
 

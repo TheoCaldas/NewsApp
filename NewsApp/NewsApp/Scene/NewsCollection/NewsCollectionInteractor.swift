@@ -11,6 +11,7 @@ typealias NewsCollectionInteractorInput = NewsCollectionViewControllerOutput
 
 protocol NewsCollectionInteractorOutput: AnyObject {
     func showArticles(_ articles: [Article])
+    func showArticles(_ articles: [Article], count: Int)
     func showFailure(with message: String)
 }
 
@@ -24,7 +25,7 @@ extension NewsCollectionInteractor: NewsCollectionInteractorInput {
         Task{
             do{
                 if let articles = try await fetchWorker?.getArticles(by: keyword, language: .en){
-                    presenter?.showArticles(articles)
+                    presenter?.showArticles(articles, count: articles.count)
                 }
             } catch (let error){
                 handleError(error, for: keyword)

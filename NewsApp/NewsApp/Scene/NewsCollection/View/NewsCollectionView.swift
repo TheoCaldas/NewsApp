@@ -42,7 +42,7 @@ class NewsCollectionView: UIView, BaseView {
         addSubview(topAlphaView)
     }
     
-    func updateResultsLabel(_ text: String){
+    func updateResultsLabel(_ text: String? = ""){
         header?.resultsLabel.text = text
     }
 }
@@ -59,7 +59,6 @@ extension NewsCollectionView{
         // ALPHA
         bottomAlphaView.backgroundColor = .background
         topAlphaView.backgroundColor = .background
-        
     }
 }
 
@@ -80,7 +79,7 @@ extension NewsCollectionView{
             bottomAlphaView.bottomAnchor.constraint(equalTo: bottomAnchor),
             bottomAlphaView.leadingAnchor.constraint(equalTo: leadingAnchor),
             bottomAlphaView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            bottomAlphaView.heightAnchor.constraint(equalToConstant: alphaLayersHeight)
+            bottomAlphaView.heightAnchor.constraint(equalToConstant: alphaLayersHeight * 0.5)
        ])
         
         topAlphaView.translatesAutoresizingMaskIntoConstraints = false
@@ -98,7 +97,11 @@ extension NewsCollectionView: UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsCollectionSmallCellView.id, for: indexPath) as? NewsCollectionSmallCellView{
-            cell.title.text = vc?.articles[indexPath.row].title
+            
+            if let article = vc?.articles[indexPath.row]{
+                cell.title.text = article.title
+                cell.author.text = "por \(article.author)"
+            }
             return cell
         }
         return UICollectionViewCell()
@@ -170,6 +173,7 @@ extension NewsCollectionView: UISearchBarDelegate{
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.isEmpty{
             self.header?.resetLabel()
+            vc?.defaultSearch()
         }
     }
 }
