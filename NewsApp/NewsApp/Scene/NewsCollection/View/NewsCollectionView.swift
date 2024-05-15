@@ -20,6 +20,8 @@ class NewsCollectionView: UIView, BaseView {
     private let cellOffset: CGFloat = 15
     private let alphaLayersHeight: CGFloat = 170
     
+    private var displayedCells = [Int]()
+    
     init(_ vc: NewsCollectionViewController) {
         self.vc = vc
         super.init(frame: .zero)
@@ -44,6 +46,7 @@ class NewsCollectionView: UIView, BaseView {
     
     func updateResultsLabel(_ text: String? = ""){
         header?.resultsLabel.text = text
+        displayedCells.removeAll()
     }
     
     func updateLayout(articles: [Article], mixedSizing: Bool){
@@ -129,6 +132,26 @@ extension NewsCollectionView: UICollectionViewDataSource{
             return header
         }
         return UICollectionReusableView()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        
+        // Cell animation
+        if let cell = cell as? NewsCollectionSmallCellView {
+            if (!displayedCells.contains(indexPath.row)){
+                displayedCells.append(indexPath.row)
+                cell.alpha = 0.2
+                cell.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+                UIView.animate(
+                    withDuration: 0.5,
+                    delay: 0,
+                    options: [.curveEaseOut],
+                    animations: {
+                        cell.alpha = 1
+                        cell.transform = .identity
+                })
+            }
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
