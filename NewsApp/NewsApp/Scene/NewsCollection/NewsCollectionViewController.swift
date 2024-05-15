@@ -8,7 +8,7 @@
 import UIKit
 
 protocol NewsCollectionViewControllerInput: AnyObject {
-    func showArticles(_ articles: [Article], with message: String)
+    func showArticles(_ articles: [Article], with message: String, mixedSizing: Bool)
     func showFailure(with message: String)
 }
 
@@ -60,10 +60,11 @@ class NewsCollectionViewController: UIViewController {
 // MARK: - NewsCollection View Controller Input Implementation
 extension NewsCollectionViewController: NewsCollectionViewControllerInput{
     
-    func showArticles(_ articles: [Article], with message: String) {
+    func showArticles(_ articles: [Article], with message: String, mixedSizing: Bool) {
         self.articles = articles
         DispatchQueue.main.async {
             self.newsCollection?.updateResultsLabel(message)
+            self.newsCollection?.updateLayout(articles: articles, mixedSizing: mixedSizing)
         }
     }
     

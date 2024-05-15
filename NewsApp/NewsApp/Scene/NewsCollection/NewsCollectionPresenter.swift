@@ -17,11 +17,11 @@ final class NewsCollectionPresenter {
 extension NewsCollectionPresenter: NewsCollectionPresenterInput {
     
     func showArticles(_ articles: [Article], count: Int) {
-        viewController?.showArticles(articles, with: "\(count) resultados")
+        viewController?.showArticles(articles, with: "\(count) resultados", mixedSizing: true)
     }
     
     func showArticles(_ articles: [Article]) {
-        viewController?.showArticles(articles, with: "")
+        viewController?.showArticles(articles, with: "", mixedSizing: false)
     }
     
     func showFailure(with message: String) {

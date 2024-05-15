@@ -9,7 +9,7 @@ import UIKit
 
 class NewsCollectionView: UIView, BaseView {
     
-    var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    var collectionView = UICollectionView(frame: .zero, collectionViewLayout: NewsCollectionView.initialLayout())
     
     var bottomAlphaView = GradientAlphaView(up: true)
     var topAlphaView = GradientAlphaView(up: false)
@@ -45,6 +45,14 @@ class NewsCollectionView: UIView, BaseView {
     func updateResultsLabel(_ text: String? = ""){
         header?.resultsLabel.text = text
     }
+    
+    func updateLayout(articles: [Article], mixedSizing: Bool){
+        if (mixedSizing){
+            collectionView.collectionViewLayout = mixedLayout(articles: articles)
+        } else{
+            collectionView.collectionViewLayout = NewsCollectionView.initialLayout()
+        }
+    }
 }
 
 extension NewsCollectionView{
@@ -67,10 +75,10 @@ extension NewsCollectionView{
         // COLLECTION VIEW
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: topAnchor, constant: cellOffset),
-            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: cellOffset),
-            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -cellOffset),
-            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -cellOffset)
+            collectionView.topAnchor.constraint(equalTo: topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 15),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
         
         // ALPHA
@@ -135,16 +143,6 @@ extension NewsCollectionView: UICollectionViewDataSource{
 // MARK: - Collection View Delegate Flow Layout Implementation
 extension NewsCollectionView: UICollectionViewDelegateFlowLayout{
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
-        let w = frame.width / 2 - (1.5 * cellOffset)
-        return CGSize(width: w, height: w)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        // Affects vertically
-        return cellOffset
-    }
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 //        print(articles[indexPath.row])
     }
@@ -175,5 +173,122 @@ extension NewsCollectionView: UISearchBarDelegate{
             self.header?.resetLabel()
             vc?.defaultSearch()
         }
+    }
+}
+
+// MARK: - Private Methods
+extension NewsCollectionView{
+    
+    private func mixedLayout(articles: [Article]) -> UICollectionViewCompositionalLayout {
+        
+        //ITEM
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalHeight(1)
+            )
+        )
+        let spacing: CGFloat = 15
+        item.contentInsets = .init(top: spacing, leading: 0, bottom: 0, trailing: spacing)
+        
+        //GROUP
+        let smallGroup = NSCollectionLayoutGroup.horizontal(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(0.5),
+                heightDimension: .fractionalWidth(0.5)
+            ),
+            repeatingSubitem: item,
+            count: 2
+        )
+        smallGroup.contentInsets = .init(top: 0, leading: spacing, bottom: 0, trailing: 0)
+
+        let bigGroup = NSCollectionLayoutGroup.horizontal(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalWidth(0.5)
+            ),
+            repeatingSubitem: item,
+            count: 1
+        )
+        bigGroup.contentInsets = .init(top: 0, leading: spacing, bottom: 0, trailing: spacing)
+        
+        var layoutItems: [NSCollectionLayoutGroup] = []
+        
+        for index in 0..<articles.count {
+            if index % 3 == 0 {
+                layoutItems.append(bigGroup)
+            } else {
+                layoutItems.append(smallGroup)
+            }
+        }
+        
+        let finalGroup = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalWidth(1.0)
+            ),
+            subitems: layoutItems
+        )
+        
+        //SECTION
+        let section = NSCollectionLayoutSection(group: finalGroup)
+        section.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
+        
+        //HEADER
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalWidth(0.6)
+            ),
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+        header.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: spacing)
+        
+        section.boundarySupplementaryItems = [header]
+        
+        //LAYOUT
+        return UICollectionViewCompositionalLayout(section: section)
+    }
+    
+    private static func initialLayout() -> UICollectionViewCompositionalLayout {
+        //ITEM
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalHeight(1)
+            )
+        )
+        let spacing: CGFloat = 15
+        item.contentInsets = .init(top: spacing, leading: 0, bottom: 0, trailing: spacing)
+        
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalWidth(0.5)
+            ),
+            repeatingSubitem: item,
+            count: 1
+        )
+        group.contentInsets = .init(top: 0, leading: spacing, bottom: 0, trailing: spacing)
+        
+        //SECTION
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
+        
+        //HEADER
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalWidth(0.6)
+            ),
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+        header.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: spacing)
+        section.boundarySupplementaryItems = [header]
+        
+        //LAYOUT
+        return UICollectionViewCompositionalLayout(section: section)
     }
 }
