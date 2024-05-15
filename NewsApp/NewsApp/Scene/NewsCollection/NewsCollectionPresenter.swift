@@ -16,7 +16,7 @@ final class NewsCollectionPresenter {
 
 extension NewsCollectionPresenter: NewsCollectionPresenterInput {
     func showArticles(_ articles: [Article]) {
-        viewController?.showArticles(articles)
+        viewController?.showArticles(articles, with: "\(articles.count) resultados")
     }
     
     func showFailure(with message: String) {

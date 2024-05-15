@@ -15,6 +15,7 @@ class NewsCollectionView: UIView, BaseView {
     var topAlphaView = GradientAlphaView(up: false)
     
     weak var vc: NewsCollectionViewController?
+    weak var header: NewsCollectionHeaderView?
     
     private let cellOffset: CGFloat = 15
     private let alphaLayersHeight: CGFloat = 170
@@ -40,6 +41,10 @@ class NewsCollectionView: UIView, BaseView {
         addSubview(bottomAlphaView)
         addSubview(topAlphaView)
     }
+    
+    func updateResultsLabel(_ text: String){
+        header?.resultsLabel.text = text
+    }
 }
 
 extension NewsCollectionView{
@@ -63,7 +68,7 @@ extension NewsCollectionView{
         // COLLECTION VIEW
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: topAnchor, constant: cellOffset * 2),
+            collectionView.topAnchor.constraint(equalTo: topAnchor, constant: cellOffset),
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: cellOffset),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -cellOffset),
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -cellOffset)
@@ -108,6 +113,7 @@ extension NewsCollectionView: UICollectionViewDataSource{
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NewsCollectionHeaderView.id, for: indexPath)
             if let headerView = header as? NewsCollectionHeaderView{
                 headerView.searchBar.delegate = self
+                self.header = headerView
             }
             return header
         }
@@ -115,7 +121,7 @@ extension NewsCollectionView: UICollectionViewDataSource{
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: frame.width, height: frame.width / 2)
+        return CGSize(width: frame.width, height: frame.width * 0.6)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -158,22 +164,12 @@ extension NewsCollectionView: UISearchBarDelegate{
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         vc?.captureTextInput(searchBar.text)
-        getHeaderView()?.collectionLabel.text = "busca \"\(searchBar.text ?? "")\"..."
+        self.header?.collectionLabel.text = "busca \"\(searchBar.text ?? "")\"..."
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.isEmpty{
-            getHeaderView()?.resetLabel()
+            self.header?.resetLabel()
         }
-    }
-}
-
-// MARK: - Private Methods
-extension NewsCollectionView{
-    private func getHeaderView() -> NewsCollectionHeaderView? {
-        if let headerView = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(item: 0, section: 0)) as? NewsCollectionHeaderView {
-            return headerView
-        }
-        return nil
     }
 }

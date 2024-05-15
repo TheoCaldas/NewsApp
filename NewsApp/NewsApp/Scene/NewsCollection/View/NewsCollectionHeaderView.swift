@@ -12,6 +12,7 @@ class NewsCollectionHeaderView: UICollectionReusableView, BaseView{
     static let id = "header"
     
     let collectionLabel = UILabel()
+    let resultsLabel = UILabel()
     let searchBar = UISearchBar()
     
     private let spaceOffset: CGFloat = 30
@@ -28,22 +29,31 @@ class NewsCollectionHeaderView: UICollectionReusableView, BaseView{
     
     func addSubviews() {
         addSubview(collectionLabel)
+        addSubview(resultsLabel)
         addSubview(searchBar)
     }
     
     func resetLabel(){
         collectionLabel.text = defaultLabelText
+        resultsLabel.text = ""
     }
 }
 
 extension NewsCollectionHeaderView{
     func setupStyles() {
-        // LABEL
+        // COLLECTION LABEL
         collectionLabel.font = UIFont(name: "Jost-Regular", size: 40)
         collectionLabel.textColor = .primary
         collectionLabel.numberOfLines = 1
         collectionLabel.text = defaultLabelText
         collectionLabel.textAlignment = .center
+        
+        // RESULTS LABEL
+        resultsLabel.font = UIFont(name: "Jost-Regular", size: 20)
+        resultsLabel.textColor = .secondary
+        resultsLabel.numberOfLines = 1
+        resultsLabel.text = ""
+        resultsLabel.textAlignment = .center
         
         // SEARCH BAR
         searchBar.setColors(background: .background, bar: .tertiary, textIcons: .primary)
@@ -62,17 +72,24 @@ extension NewsCollectionHeaderView{
             searchBar.topAnchor.constraint(equalTo: topAnchor, constant: spaceOffset * 2),
             searchBar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: spaceOffset),
             searchBar.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -spaceOffset),
-//            searchBar.heightAnchor.constraint(equalToConstant: 150)
         ])
         
-        // LABEL
+        // COLLECTION LABEL
         collectionLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             collectionLabel.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: spaceOffset / 2),
             collectionLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collectionLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -spaceOffset / 2),
-//            collectionLabel.heightAnchor.constraint(equalToConstant: 50)
+            collectionLabel.bottomAnchor.constraint(equalTo: resultsLabel.topAnchor),
+        ])
+        
+        // COLLECTION LABEL
+        resultsLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            resultsLabel.topAnchor.constraint(equalTo: collectionLabel.bottomAnchor),
+            resultsLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            resultsLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+            resultsLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -spaceOffset / 2),
         ])
     }
 }

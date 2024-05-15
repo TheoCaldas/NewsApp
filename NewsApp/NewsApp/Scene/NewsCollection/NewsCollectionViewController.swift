@@ -8,7 +8,7 @@
 import UIKit
 
 protocol NewsCollectionViewControllerInput: AnyObject {
-    func showArticles(_ articles: [Article])
+    func showArticles(_ articles: [Article], with message: String)
     func showFailure(with message: String)
 }
 
@@ -52,15 +52,17 @@ class NewsCollectionViewController: UIViewController {
 
 // MARK: - NewsCollection View Controller Input Implementation
 extension NewsCollectionViewController: NewsCollectionViewControllerInput{
-    func showArticles(_ articles: [Article]) {
+    
+    func showArticles(_ articles: [Article], with message: String) {
         self.articles = articles
+        DispatchQueue.main.async {
+            self.newsCollection?.updateResultsLabel(message)
+        }
     }
     
     func showFailure(with message: String) {
         DispatchQueue.main.async {
-            let alert = UIAlertController(title: "Sem resultados", message: message, preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            self.present(alert, animated: true)
+            self.newsCollection?.updateResultsLabel(message)
         }
     }
 }

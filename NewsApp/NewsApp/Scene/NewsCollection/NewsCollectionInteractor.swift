@@ -27,14 +27,7 @@ extension NewsCollectionInteractor: NewsCollectionInteractorInput {
                     presenter?.showArticles(articles)
                 }
             } catch (let error){
-                switch error as? FetchError{
-                case .isEmpty:
-                    presenter?.showFailure(with: "No articles found for \"\(keyword)\"")
-                case .didFail:
-                    presenter?.showFailure(with: "Connection error")
-                default:
-                    presenter?.showFailure(with: "Unknown error")
-                }
+                handleError(error, for: keyword)
             }
         }
     }
@@ -46,15 +39,19 @@ extension NewsCollectionInteractor: NewsCollectionInteractorInput {
                     presenter?.showArticles(articles)
                 }
             } catch (let error){
-                switch error as? FetchError{
-                case .isEmpty:
-                    presenter?.showFailure(with: "No articles found for \"\(country)\"")
-                case .didFail:
-                    presenter?.showFailure(with: "Connection error")
-                default:
-                    presenter?.showFailure(with: "Unknown error")
-                }
+                handleError(error, for: country.rawValue)
             }
+        }
+    }
+    
+    private func handleError(_ error: Error, for searchInput: String){
+        switch error as? FetchError{
+            case .isEmpty:
+                presenter?.showFailure(with: "Nenhum resultado para \"\(searchInput)\"")
+            case .didFail:
+                presenter?.showFailure(with: "Erro de conexão")
+            default:
+                presenter?.showFailure(with: "Erro")
         }
     }
 }
