@@ -57,7 +57,6 @@ class NewsCollectionViewController: UIViewController {
     }
 }
 
-// MARK: - NewsCollection View Controller Input Implementation
 extension NewsCollectionViewController: NewsCollectionViewControllerInput{
     
     func showArticles(_ articles: [Article], with message: String, mixedSizing: Bool) {

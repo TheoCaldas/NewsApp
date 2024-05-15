@@ -21,6 +21,7 @@ class NewsCollectionView: UIView, BaseView {
     private let alphaLayersHeight: CGFloat = 170
     
     private var displayedCells = [Int]()
+    private var smalCells = [Int]()
     
     init(_ vc: NewsCollectionViewController) {
         self.vc = vc
@@ -29,6 +30,7 @@ class NewsCollectionView: UIView, BaseView {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(NewsCollectionSmallCellView.self, forCellWithReuseIdentifier: NewsCollectionSmallCellView.id)
+        collectionView.register(NewsCollectionBigCellView.self, forCellWithReuseIdentifier: NewsCollectionBigCellView.id)
         collectionView.register(NewsCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: NewsCollectionHeaderView.id)
         
         setupView()
@@ -47,6 +49,7 @@ class NewsCollectionView: UIView, BaseView {
     func updateResultsLabel(_ text: String? = ""){
         header?.resultsLabel.text = text
         displayedCells.removeAll()
+        smalCells.removeAll()
     }
     
     func updateLayout(articles: [Article], mixedSizing: Bool){
@@ -107,11 +110,22 @@ extension NewsCollectionView{
 extension NewsCollectionView: UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsCollectionSmallCellView.id, for: indexPath) as? NewsCollectionSmallCellView{
+        
+        let index = indexPath.row
+        
+        if smalCells.contains(index), let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsCollectionSmallCellView.id, for: indexPath) as? NewsCollectionSmallCellView{
             
             if let article = vc?.articles[indexPath.row]{
                 cell.title.text = article.title
                 cell.author.text = "por \(article.author)"
+            }
+            return cell
+        } else if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsCollectionBigCellView.id, for: indexPath) as? NewsCollectionBigCellView{
+
+            if let article = vc?.articles[indexPath.row]{
+                cell.title.text = article.title
+                cell.author.text = "por \(article.author)"
+                cell.descript.text = article.description
             }
             return cell
         }
@@ -138,19 +152,9 @@ extension NewsCollectionView: UICollectionViewDataSource{
         
         // Cell animation
         if let cell = cell as? NewsCollectionSmallCellView {
-            if (!displayedCells.contains(indexPath.row)){
-                displayedCells.append(indexPath.row)
-                cell.alpha = 0.2
-                cell.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
-                UIView.animate(
-                    withDuration: 0.5,
-                    delay: 0,
-                    options: [.curveEaseOut],
-                    animations: {
-                        cell.alpha = 1
-                        cell.transform = .identity
-                })
-            }
+            animateCell(cell: cell, index: indexPath.row)
+        } else if let cell = cell as? NewsCollectionBigCellView{
+            animateCell(cell: cell, index: indexPath.row)
         }
     }
     
@@ -173,11 +177,15 @@ extension NewsCollectionView: UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? NewsCollectionSmallCellView{
             cell.updateColor(true)
+        } else if let cell = collectionView.cellForItem(at: indexPath) as? NewsCollectionBigCellView{
+            cell.updateColor(true)
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? NewsCollectionSmallCellView{
+            cell.updateColor(false)
+        }else if let cell = collectionView.cellForItem(at: indexPath) as? NewsCollectionBigCellView{
             cell.updateColor(false)
         }
     }
@@ -211,6 +219,7 @@ extension NewsCollectionView{
                 heightDimension: .fractionalHeight(1)
             )
         )
+        
         let spacing: CGFloat = 15
         item.contentInsets = .init(top: spacing, leading: 0, bottom: 0, trailing: spacing)
         
@@ -242,6 +251,7 @@ extension NewsCollectionView{
                 layoutItems.append(bigGroup)
             } else {
                 layoutItems.append(smallGroup)
+                smalCells.append(index)
             }
         }
         
@@ -288,7 +298,8 @@ extension NewsCollectionView{
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .fractionalWidth(0.5)
+                heightDimension: .fractionalWidth(0.65)
+//                heightDimension: .fractionalWidth(0.5)
             ),
             repeatingSubitem: item,
             count: 1
@@ -313,5 +324,21 @@ extension NewsCollectionView{
         
         //LAYOUT
         return UICollectionViewCompositionalLayout(section: section)
+    }
+    
+    private func animateCell(cell: UICollectionViewCell, index: Int){
+        if (!displayedCells.contains(index)){
+            displayedCells.append(index)
+            cell.alpha = 0.2
+            cell.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+            UIView.animate(
+                withDuration: 0.5,
+                delay: 0,
+                options: [.curveEaseOut],
+                animations: {
+                    cell.alpha = 1
+                    cell.transform = .identity
+            })
+        }
     }
 }

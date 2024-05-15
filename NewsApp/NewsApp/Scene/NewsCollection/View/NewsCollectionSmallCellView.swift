@@ -47,7 +47,7 @@ extension NewsCollectionSmallCellView{
         title.textAlignment = .left
         
         //AUTHOR
-        author.font = UIFont(name: "Jost-Regular", size: 16)
+        author.font = UIFont(name: "Jost-Italic", size: 16)
         author.textColor = .secondary
         author.numberOfLines = 1
         author.textAlignment = .left
