@@ -16,9 +16,9 @@ class ArticleDetailsView: UIView, BaseView {
     let date = UILabel()
     let content = UILabel()
     let image = UIImageView()
+    let webButton = UIButton(type: .system)
     
     init() {
-//        self.vc = vc
         super.init(frame: .zero)
         setupView()
     }
@@ -33,6 +33,7 @@ class ArticleDetailsView: UIView, BaseView {
         addSubview(date)
         addSubview(content)
         addSubview(image)
+        addSubview(webButton)
     }
 }
 
@@ -68,6 +69,15 @@ extension ArticleDetailsView{
         image.image = UIImage(named: "placeholder")
         image.layer.cornerRadius = 25
         image.layer.masksToBounds = true
+        
+        // BUTTON
+        webButton.setTitle("ler mais", for: .normal)
+        webButton.tintColor = .primary
+        webButton.backgroundColor = .tertiary
+        webButton.layer.cornerRadius = 20
+        webButton.layer.masksToBounds = true
+        webButton.titleLabel?.font = UIFont.systemFont(ofSize: 19)
+        webButton.addTarget(vc, action: #selector(vc?.openWeb), for: .touchUpInside)
     }
 }
 
@@ -80,8 +90,8 @@ extension ArticleDetailsView{
         image.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             image.topAnchor.constraint(equalTo: topAnchor, constant: offset * 3),
-            image.leadingAnchor.constraint(equalTo: leadingAnchor, constant: offset),
-            image.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -offset),
+            image.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
+            image.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -0),
             image.heightAnchor.constraint(lessThanOrEqualTo: image.widthAnchor, multiplier: 0.7)
 //            title.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -offset),
         ])
@@ -122,6 +132,13 @@ extension ArticleDetailsView{
 //            content.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -offset),
         ])
         
-        //IMAGE
+        // BUTTON
+        webButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            webButton.topAnchor.constraint(equalTo: title.bottomAnchor, constant: offset),
+            webButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -offset),
+            webButton.widthAnchor.constraint(equalToConstant: 100),
+            webButton.heightAnchor.constraint(equalToConstant: 50),
+        ])
     }
 }

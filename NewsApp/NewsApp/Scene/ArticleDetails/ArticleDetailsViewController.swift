@@ -13,17 +13,24 @@ class ArticleDetailsViewController: UIViewController{
         didSet{
             detailsView.title.text = article?.title
             detailsView.author.text = article?.author
-            detailsView.date.text = article?.publishDate.toISO()
+            detailsView.date.text = article?.publishDate.toBR()
             detailsView.content.text = article?.content
+            webView.webURL = article?.sourceURL
         }
     }
     
     var detailsView = ArticleDetailsView()
+    var webView = ArticleDetailsWebView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view = detailsView
         detailsView.vc = self
+    }
+    
+    @objc func openWeb() {
+        webView.goToWebpage()
+        view = webView
     }
 }

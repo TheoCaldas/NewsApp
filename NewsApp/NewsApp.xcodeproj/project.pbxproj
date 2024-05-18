@@ -43,6 +43,7 @@
 		E4D5E2802BF5516B00EBA3D9 /* ArticleDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5E27F2BF5516B00EBA3D9 /* ArticleDetailsViewController.swift */; };
 		E4D5E2832BF551DE00EBA3D9 /* ArticleDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5E2822BF551DE00EBA3D9 /* ArticleDetailsView.swift */; };
 		E4D5E2852BF559D700EBA3D9 /* ArticleDetailsFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5E2842BF559D700EBA3D9 /* ArticleDetailsFactory.swift */; };
+		E4FB54412BF929E700FDC4F3 /* ArticleDetailsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FB54402BF929E700FDC4F3 /* ArticleDetailsWebView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +96,7 @@
 		E4D5E27F2BF5516B00EBA3D9 /* ArticleDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleDetailsViewController.swift; sourceTree = "<group>"; };
 		E4D5E2822BF551DE00EBA3D9 /* ArticleDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleDetailsView.swift; sourceTree = "<group>"; };
 		E4D5E2842BF559D700EBA3D9 /* ArticleDetailsFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleDetailsFactory.swift; sourceTree = "<group>"; };
+		E4FB54402BF929E700FDC4F3 /* ArticleDetailsWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleDetailsWebView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -308,6 +310,7 @@
 			children = (
 				E4D5E27F2BF5516B00EBA3D9 /* ArticleDetailsViewController.swift */,
 				E4D5E2822BF551DE00EBA3D9 /* ArticleDetailsView.swift */,
+				E4FB54402BF929E700FDC4F3 /* ArticleDetailsWebView.swift */,
 			);
 			path = ArticleDetails;
 			sourceTree = "<group>";
@@ -461,6 +464,7 @@
 				E4D5E2652BF449BB00EBA3D9 /* NewsCollectionSmallCellView.swift in Sources */,
 				E4D5E27E2BF544AB00EBA3D9 /* ArticleImage.swift in Sources */,
 				E4D5E2632BF4495100EBA3D9 /* NewsCollectionHeaderView.swift in Sources */,
+				E4FB54412BF929E700FDC4F3 /* ArticleDetailsWebView.swift in Sources */,
 				E4D5E2782BF476C600EBA3D9 /* GradientAlphaView.swift in Sources */,
 				E4D5E2272BF3100200EBA3D9 /* NewsAPIResponse.swift in Sources */,
 				E4D5E2612BF4488000EBA3D9 /* NewsCollectionViewController.swift in Sources */,
