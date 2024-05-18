@@ -118,6 +118,11 @@ extension NewsCollectionView: UICollectionViewDataSource{
             if let article = vc?.articles[index]{
                 cell.title.text = article.title
                 cell.author.text = "por \(article.author)"
+                vc?.interactor?.getImage(url: article.imageURL ?? "", completion: { articleImage in
+                    DispatchQueue.main.async {
+                        cell.image.image = articleImage.image
+                    }
+                })
             }
             return cell
         } else if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsCollectionBigCellView.id, for: indexPath) as? NewsCollectionBigCellView{
@@ -154,11 +159,9 @@ extension NewsCollectionView: UICollectionViewDataSource{
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        
-        // Cell animation
         if let cell = cell as? NewsCollectionSmallCellView {
             animateCell(cell: cell, index: indexPath.row)
-        } else if let cell = cell as? NewsCollectionBigCellView{
+        } else if let cell = cell as? NewsCollectionBigCellView {
             animateCell(cell: cell, index: indexPath.row)
         }
     }
@@ -176,11 +179,9 @@ extension NewsCollectionView: UICollectionViewDataSource{
 extension NewsCollectionView: UICollectionViewDelegateFlowLayout{
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        if collectionView.cellForItem(at: indexPath) is NewsCollectionSmallCellView{
-            vc?.goToDetails(index: indexPath.row, image: nil)
+        if let cell = collectionView.cellForItem(at: indexPath) as? NewsCollectionSmallCellView{
+            vc?.goToDetails(index: indexPath.row, image: cell.image.image)
         } else if let cell = collectionView.cellForItem(at: indexPath) as? NewsCollectionBigCellView{
-//            cell.animateImage(hide: false)
             vc?.goToDetails(index: indexPath.row, image: cell.image.image)
         }
     }
@@ -189,17 +190,14 @@ extension NewsCollectionView: UICollectionViewDelegateFlowLayout{
         if let cell = collectionView.cellForItem(at: indexPath) as? NewsCollectionSmallCellView{
             cell.updateColor(true)
         } else if let cell = collectionView.cellForItem(at: indexPath) as? NewsCollectionBigCellView{
-//            cell.animateImage(hide: false)
             cell.updateColor(true)
-            
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? NewsCollectionSmallCellView{
             cell.updateColor(false)
-        }else if let cell = collectionView.cellForItem(at: indexPath) as? NewsCollectionBigCellView{
-//            cell.animateImage(hide: true)
+        } else if let cell = collectionView.cellForItem(at: indexPath) as? NewsCollectionBigCellView{
             cell.updateColor(false)
         }
     }
@@ -343,7 +341,9 @@ extension NewsCollectionView{
     private func animateCell(cell: UICollectionViewCell, index: Int){
         
         if (!displayedCells.contains(index)){
-            if let cell = cell as? NewsCollectionBigCellView{
+            if let cell = cell as? NewsCollectionSmallCellView{
+                cell.animateImage(hide: true, duration: 1.0)
+            } else if let cell = cell as? NewsCollectionBigCellView{
                 cell.animateImage(hide: true, duration: 1.0)
             }
             displayedCells.append(index)

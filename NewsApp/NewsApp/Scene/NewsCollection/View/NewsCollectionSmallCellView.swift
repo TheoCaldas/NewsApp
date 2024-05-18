@@ -13,6 +13,10 @@ class NewsCollectionSmallCellView: UICollectionViewCell, BaseView{
     
     let title = UILabel()
     let author = UILabel()
+    let image = UIImageView()
+    
+    private let minImageAlpha: CGFloat = 0
+    private let maxImageAlpha: CGFloat = 0.9
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,6 +30,21 @@ class NewsCollectionSmallCellView: UICollectionViewCell, BaseView{
     func addSubviews() {
         addSubview(title)
         addSubview(author)
+        addSubview(image)
+    }
+    
+    func animateImage(hide: Bool, duration: TimeInterval? = nil){
+        let initialAlpha: CGFloat = (hide) ? maxImageAlpha : minImageAlpha
+        let finalAlpha: CGFloat = (hide) ? minImageAlpha : maxImageAlpha
+        
+        image.alpha = initialAlpha
+        UIView.animate(
+            withDuration: duration ?? 0.2,
+            delay: 0,
+            options: [.curveEaseOut],
+            animations: {
+                self.image.alpha = finalAlpha
+        })
     }
     
     func updateColor(_ isHighlited: Bool){
@@ -51,6 +70,12 @@ extension NewsCollectionSmallCellView{
         author.textColor = .secondary
         author.numberOfLines = 1
         author.textAlignment = .left
+        
+        //IMAGE
+        image.image = UIImage(named: "placeholder")
+        image.layer.cornerRadius = 25
+        image.layer.masksToBounds = true
+        image.alpha = minImageAlpha
     }
 }
 
@@ -74,5 +99,14 @@ extension NewsCollectionSmallCellView{
             author.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             author.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
         ])
+        
+        //IMAGE
+        image.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            image.topAnchor.constraint(equalTo: topAnchor),
+            image.leadingAnchor.constraint(equalTo: leadingAnchor),
+            image.trailingAnchor.constraint(equalTo: trailingAnchor),
+            image.bottomAnchor.constraint(equalTo: bottomAnchor),
+        ])       
     }
 }
