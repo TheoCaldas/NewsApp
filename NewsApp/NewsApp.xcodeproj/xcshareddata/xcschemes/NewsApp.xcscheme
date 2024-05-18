@@ -65,7 +65,7 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "NEWS_API_KEY"
-            value = "c22f9bc2044d455193ff644981ea4954"
+            value = "eab77a9d3b2b4428ba48dd37ad6c785c"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
